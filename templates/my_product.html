@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Products</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            padding-top: 100px;
+            margin-bottom: 80px; /* Menambahkan ruang di bawah konten utama */
+        }
+        .product-image {
+            max-width: 100%;
+            height: auto;
+        }
+        .card {
+            margin-bottom: 20px; /* Menambahkan margin bottom untuk card */
+        }
+        .card-body {
+            padding: 1.25rem;
+        }
+        .modal-content {
+            background-color: #f8f9fa; /* Mengubah warna latar belakang modal */
+        }
+        .modal-header {
+            border-bottom: none; /* Menghapus border bawah pada header modal */
+        }
+        .modal-title {
+            color: #333; /* Warna teks judul modal */
+        }
+        .btn {
+            font-size: 0.875rem; /* Ukuran font tombol */
+        }
+        .navbar-brand {
+            font-weight: bold; /* Memberi tebal pada teks navbar brand */
+        }
+        .nav-link {
+            font-size: 0.875rem; /* Ukuran font nav-link */
+        }
+        .footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: #343a40; /* Warna latar belakang footer */
+            color: white; /* Warna teks footer */
+            padding: 10px 0; /* Padding pada footer */
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">Jual Mobil Bekas</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Home</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/product">Products</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/my_product">My Products</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logout">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        <section class="add-product mb-4">
+            <div class="row">
+                <div class="col-lg-12">
+                    <a href="/add_product" class="btn btn-success">Add New Product</a>
+                </div>
+            </div>
+        </section>
+        <section class="products">
+            <div class="row">
+                {{ range .Products }}
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <form action="/my_product" method="post">
+                                <input type="hidden" name="action" value="view_image">
+                                <input type="hidden" name="image_id" value="{{ .ID }}">
+                                <button type="submit" class="btn btn-primary">Lihat Gambar</button>
+                            </form>
+                            <h4 class="card-title">{{ .Name }}</h4>
+                            <p class="card-text">{{ .Description }}</p>
+                            <p class="card-text">Rp {{ printf "%.2f" .Price }}</p>
+                            <form action="/my_product" method="POST">
+                                <input type="hidden" name="action" value="delete">
+                                <input type="hidden" name="product_id" value="{{ .ID }}">
+                                <button type="submit" class="btn btn-danger btn-sm mb-2">Delete</button>
+                            </form>
+                            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editProduct{{ .ID }}">
+                                Edit
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal for Edit Product -->
+                <div class="modal fade" id="editProduct{{ .ID }}" tabindex="-1" role="dialog" aria-labelledby="editProduct{{ .ID }}Label" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="editProduct{{ .ID }}Label">Edit Product</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="/my_product" method="POST">
+                                    <input type="hidden" name="action" value="edit">
+                                    <input type="hidden" name="product_id" value="{{ .ID }}">
+                                    <div class="form-group">
+                                        <label for="name">Name</label>
+                                        <input type="text" class="form-control" id="name" name="name" value="{{ .Name }}" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="description">Description</label>
+                                        <textarea class="form-control" id="description" name="description" rows="3" required>{{ .Description }}</textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="price">Price</label>
+                                        <input type="number" class="form-control" id="price" name="price" value="{{ .Price }}" required>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Save changes</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {{ end }}
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container text-center">
+            <p class="m-0">&copy; 2024 E-commerce App. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

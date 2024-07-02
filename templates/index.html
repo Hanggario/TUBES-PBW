@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TUBES PBW</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            padding-top: 100px;
+            margin-bottom: 80px; /* Menambahkan ruang di bawah konten utama */
+        }
+        .hero {
+    background-image: url('/static/asset/mobilmobil.jpg');
+    background-size: cover;
+    color: white;
+    padding: 100px 0;
+    text-align: center;
+    margin-bottom: 50px;
+        }
+        .products {
+            padding: 50px 0; /* Padding pada bagian products */
+        }
+        .product-image {
+            max-width: 100%;
+            height: auto;
+        }
+        .card {
+            margin-bottom: 20px; /* Menambahkan margin bottom untuk card */
+        }
+        .card-body {
+            padding: 1.25rem;
+        }
+        .modal-content {
+            background-color: #f8f9fa; /* Mengubah warna latar belakang modal */
+        }
+        .modal-header {
+            border-bottom: none; /* Menghapus border bawah pada header modal */
+        }
+        .modal-title {
+            color: #333; /* Warna teks judul modal */
+        }
+        .btn {
+            font-size: 0.875rem; /* Ukuran font tombol */
+        }
+        .navbar-brand {
+            font-weight: bold; /* Memberi tebal pada teks navbar brand */
+        }
+        .nav-link {
+            font-size: 0.875rem; /* Ukuran font nav-link */
+        }
+        .footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: #343a40; /* Warna latar belakang footer */
+            color: white; /* Warna teks footer */
+            padding: 10px 0; /* Padding pada footer */
+        }
+        .recommended-section {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .recommended-title {
+        font-size: 2.5rem;
+        color: #333; /* Warna abu-abu gelap */
+        font-weight: bold;
+        text-transform: uppercase;
+        position: relative;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+    }
+
+    .recommended-title::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 50px;
+        height: 3px;
+        background-color: #333; /* Warna abu-abu gelap */
+    }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">Jual Mobil Bekas</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Home</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/product">Products</a>
+                    </li>
+                    {{ if .IsAuthenticated }}
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/my_product">My Products</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logout">Logout</a>
+                    </li>
+                    {{ else }}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/login">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/register">Register</a>
+                    </li>
+                    {{ end }}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <div class="container">
+            <h1 class="display-4 mb-4">MOBILBEKAS</h1>
+            <p class="lead">Temukan mobil impian dengan harga terjangkau hanya di MOBILBEKAS</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="products">
+            <div class="row">
+                <div class="col-lg-12 recommended-section">
+                    <h2 class="recommended-title">Disarankan</h2>
+                </div>
+                {{ range .Products }}
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div class="card h-100">
+                        <img class="card-img-top product-image" src="/static/asset/AVAILABLE.jpg" alt="Product Image">
+                        <div class="card-body">
+                            <h4 class="card-title">{{ .Name }}</h4>
+                            <p class="card-text">{{ .Description }}</p>
+                            <p class="card-text">Rp {{ printf "%.2f" .Price }}</p>
+                        </div>
+                    </div>
+                </div>
+                {{ end }}
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container text-center">
+            <p class="m-0">&copy; 2024 TUBES Pemrograman Berbasis Web.</p>
+        </div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
